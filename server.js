@@ -48,10 +48,15 @@ async function getGeoInfo(ip) {
 
 // WebSocket events
 io.on("connection", (socket) => {
-  const ip = socket.handshake.headers["x-forwarded-for"] || socket.conn.remoteAddress;
+  let rawIP = socket.handshake.headers["x-forwarded-for"] || socket.conn.remoteAddress;
+  const ip = rawIP?.split(",")[0]?.replace("::ffff:", "") || "0.0.0.0";
+
   getGeoInfo(ip).then((geo) => {
     socket.geo = geo;
   });
+
+  ...
+});
 
   socket.on("user_message", async (msg) => {
     if (!messages) return console.error("MongoDB not initialized");
