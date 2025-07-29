@@ -1,11 +1,30 @@
 <!DOCTYPE html>
-<html>
-<head><title>Trucktaxonline Chat</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trucktaxonline Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <h3>Chat with us (Trucktaxonline)</h3>
-  <div id="chat"></div>
-  <input id="msg" placeholder="Type a message..." />
-  <button onclick="send()">Send</button>
+  <div class="chat-widget">
+    <button class="chat-toggle" onclick="toggleChat()">💬</button>
+    <div class="chat-box" id="chatBox">
+      <div class="chat-header">
+        <span>Please enter your message</span>
+        <button class="close" onclick="toggleChat()">×</button>
+      </div>
+      <div class="chat-body" id="chat"></div>
+      <div class="quick-buttons">
+        <button onclick="quickSend('Hello!')">Hello!</button>
+        <button onclick="quickSend('I need help')">I need help</button>
+      </div>
+      <div class="chat-input">
+        <input id="msg" placeholder="Type here..." />
+        <button onclick="send()">↑</button>
+      </div>
+    </div>
+  </div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="chat.js"></script>
 </body>

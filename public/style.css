@@ -1,0 +1,95 @@
+
+.chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.chat-toggle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #2e7d32;
+  color: white;
+  border: none;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+}
+
+.chat-box {
+  display: none;
+  width: 320px;
+  max-height: 450px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  flex-direction: column;
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+}
+
+.chat-box.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background: #2e7d32;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.chat-input button {
+  background: #2e7d32;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  margin-left: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quick-buttons {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 10px;
+  border-top: 1px solid #eee;
+  background: #f9f9f9;
+}
+
+.quick-buttons button {
+  background: white;
+  border: 1px solid #2e7d32;
+  color: #2e7d32;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 12px;
+}
