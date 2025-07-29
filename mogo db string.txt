@@ -1,0 +1,1 @@
+mongodb+srv://truckadmin:<db_password>@cluster0.c6shpkq.mongodb.net/
