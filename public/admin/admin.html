@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Chat - Trucktaxonline</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div class="admin-container">
+    <h2>📬 Trucktaxonline Admin Chat</h2>
+    <div id="chat"></div>
+    <div class="input-area">
+      <input id="msg" placeholder="Type admin reply..." />
+      <button onclick="send()">Send</button>
+    </div>
+    <audio id="notifySound" src="notification.mp3" preload="auto"></audio>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
