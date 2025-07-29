@@ -11,15 +11,14 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3000;
 
-// Serve frontend files
 app.use(cors());
 app.use(express.static("public"));
 
-// MongoDB setup
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 const client = new MongoClient(mongoUri);
 let messages;
 
+// Connect MongoDB
 (async () => {
   try {
     await client.connect();
@@ -31,14 +30,14 @@ let messages;
   }
 })();
 
-// IP Location helper
+// Get IP geo info
 async function getGeoInfo(ip) {
   try {
     const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
     return {
       ip,
-      city: data.city,
-      country: data.country_name,
+      city: data.city || "Unknown",
+      country: data.country_name || "Unknown",
       source: data.org || "Unknown",
     };
   } catch (e) {
@@ -46,8 +45,8 @@ async function getGeoInfo(ip) {
   }
 }
 
-// WebSocket events
 io.on("connection", (socket) => {
+  // Improved IP parsing
   let rawIP = socket.handshake.headers["x-forwarded-for"] || socket.conn.remoteAddress;
   const ip = rawIP?.split(",")[0]?.replace("::ffff:", "") || "0.0.0.0";
 
@@ -55,35 +54,36 @@ io.on("connection", (socket) => {
     socket.geo = geo;
   });
 
-  ...
-});
-
   socket.on("user_message", async (msg) => {
     if (!messages) return console.error("MongoDB not initialized");
+
     const fullMsg = {
       sender: "user",
       message: msg,
       time: new Date(),
       geo: socket.geo,
     };
+
     await messages.insertOne(fullMsg);
     io.emit("chat_message", fullMsg);
   });
 
   socket.on("admin_message", async (msg) => {
     if (!messages) return console.error("MongoDB not initialized");
+
     const fullMsg = {
       sender: "admin",
       message: msg,
       time: new Date(),
       geo: null,
     };
+
     await messages.insertOne(fullMsg);
     io.emit("chat_message", fullMsg);
   });
 });
 
-// View full chat history (optional)
+// View chat history (for admin)
 app.get("/history", async (req, res) => {
   if (!messages) return res.status(500).json({ error: "DB not ready" });
   const chat = await messages.find().sort({ time: 1 }).toArray();
