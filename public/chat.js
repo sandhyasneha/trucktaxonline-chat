@@ -1,4 +1,3 @@
-
 const socket = io();
 const messagesDiv = document.getElementById("messages");
 const sendBtn = document.getElementById("sendBtn");
@@ -54,6 +53,7 @@ function formatTime(dateStr) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
+// Toggle widget open/close
 document.addEventListener("DOMContentLoaded", () => {
   const chatBubble = document.getElementById("chatBubble");
   const chatWidget = document.getElementById("chatWidget");
