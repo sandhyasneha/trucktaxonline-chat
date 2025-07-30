@@ -6,9 +6,13 @@ const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
 const fileInput = document.getElementById("fileInput");
 const downloadBtn = document.getElementById("downloadBtn");
+const chatBubble = document.getElementById("chatBubble");
+const chatWidget = document.getElementById("chatWidget");
+const closeBtn = document.getElementById("closeBtn");
 
 let chatHistory = [];
 
+// 💬 Send message
 sendBtn.addEventListener("click", () => {
   const msg = msgInput.value.trim();
   if (!msg) return;
@@ -16,6 +20,7 @@ sendBtn.addEventListener("click", () => {
   msgInput.value = "";
 });
 
+// 📥 Receive message
 socket.on("chat_message", (data) => {
   const loc = data.location ? `[${data.location}, ${data.country}]` : "[Unknown]";
   const time = formatTime(data.timestamp);
@@ -24,15 +29,16 @@ socket.on("chat_message", (data) => {
   chatHistory.push(html);
 });
 
+// 😊 Emoji Picker
 emojiBtn.addEventListener("click", () => {
   emojiPicker.style.display = emojiPicker.style.display === "none" ? "block" : "none";
 });
-
 emojiPicker.addEventListener("emoji-click", (event) => {
   msgInput.value += event.detail.unicode;
   emojiPicker.style.display = "none";
 });
 
+// 📎 File Upload
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
   if (!file) return;
@@ -40,6 +46,7 @@ fileInput.addEventListener("change", () => {
   socket.emit("user_message", fileLink);
 });
 
+// 💾 Download Chat
 downloadBtn.addEventListener("click", () => {
   const blob = new Blob([chatHistory.join("\n")], { type: "text/plain" });
   const link = document.createElement("a");
@@ -48,24 +55,19 @@ downloadBtn.addEventListener("click", () => {
   link.click();
 });
 
+// 🕓 Format time
 function formatTime(dateStr) {
   const date = new Date(dateStr);
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Widget Toggle Logic
-document.addEventListener("DOMContentLoaded", () => {
-  const chatBubble = document.getElementById("chatBubble");
-  const chatWidget = document.getElementById("chatWidget");
-  const closeBtn = document.getElementById("closeBtn");
+// 💬 Bubble Toggle Logic
+chatBubble.addEventListener("click", () => {
+  chatWidget.classList.remove("hidden");
+  chatBubble.style.display = "none";
+});
 
-  chatBubble.addEventListener("click", () => {
-    chatWidget.classList.remove("hidden");
-    chatBubble.style.display = "none";
-  });
-
-  closeBtn.addEventListener("click", () => {
-    chatWidget.classList.add("hidden");
-    chatBubble.style.display = "block";
-  });
+closeBtn.addEventListener("click", () => {
+  chatWidget.classList.add("hidden");
+  chatBubble.style.display = "block";
 });
