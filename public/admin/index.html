@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Trucktaxonline</title>
+  <link rel="stylesheet" href="/admin/styles.css" />
+</head>
+<body>
+  <div class="dashboard">
+    <h1>📊 Admin Chat Dashboard</h1>
+
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="🔍 Search messages" />
+      <input type="date" id="dateInput" />
+      <button onclick="filterChats()">Filter</button>
+      <button onclick="downloadResults()">⬇️ Download</button>
+    </div>
+
+    <div id="results"></div>
+  </div>
+
+  <script>
+    async function filterChats() {
+      const keyword = document.getElementById("searchInput").value;
+      const date = document.getElementById("dateInput").value;
+      const res = await fetch(`/admin/search?keyword=${keyword}&date=${date}`);
+      const data = await res.json();
+
+      const resultsDiv = document.getElementById("results");
+      resultsDiv.innerHTML = "";
+      data.forEach(chat => {
+        const p = document.createElement("p");
+        p.innerHTML = `<strong>${chat.sender}</strong> [${chat.location || "-"}, ${chat.country || "-"}] (${new Date(chat.timestamp).toLocaleString()}): ${chat.message}`;
+        resultsDiv.appendChild(p);
+      });
+    }
+
+    function downloadResults() {
+      const text = document.getElementById("results").innerText;
+      const blob = new Blob([text], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "chat_history.txt";
+      a.click();
+    }
+  </script>
+</body>
+</html>
