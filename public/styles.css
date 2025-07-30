@@ -1,54 +1,60 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+}
+
+#chatBubble {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #007bff;
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 1000;
 }
 
 #chatWidget {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
-
-#toggleChat {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 25px;
-  padding: 12px 20px;
-  cursor: pointer;
-  font-size: 14px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-#chatBox {
+  bottom: 100px;
+  right: 25px;
   width: 320px;
-  height: 400px;
-  background-color: #ffffff;
-  border-radius: 10px;
+  max-height: 500px;
+  background: white;
   border: 1px solid #ccc;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
-  position: relative;
-  margin-top: 10px;
+  z-index: 1000;
 }
 
-#chatBox.hidden {
+#chatWidget.hidden {
   display: none;
 }
 
 #chatHeader {
-  background-color: #4CAF50;
+  background-color: #007bff;
   color: white;
   padding: 10px;
-  font-weight: bold;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+}
+
+#chatHeader button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 #messages {
@@ -56,29 +62,37 @@ body {
   padding: 10px;
   overflow-y: auto;
   font-size: 14px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 
 #controls {
-  padding: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
   align-items: center;
+  padding: 8px;
+  gap: 6px;
 }
 
-#controls input[type=\"text\"] {
+#controls input[type="text"] {
   flex: 1;
-  padding: 5px;
-  font-size: 14px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#controls input[type="file"] {
+  font-size: 12px;
 }
 
 #controls button {
-  padding: 6px 10px;
-  font-size: 14px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f1f1f1;
   cursor: pointer;
 }
 
-#emojiPicker {
-  bottom: 60px;
-  right: 20px;
+#controls button:hover {
+  background-color: #ddd;
 }
