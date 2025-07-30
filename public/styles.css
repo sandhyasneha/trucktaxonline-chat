@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* 💬 Chat Bubble Launcher */
 #chatBubble {
   position: fixed;
   bottom: 25px;
@@ -15,50 +16,11 @@ body {
   text-align: center;
   line-height: 60px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
-#chatWidget {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 320px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  font-family: sans-serif;
-  z-index: 9999;
-}
-
-#chatHeader {
-  background-color: #0a6e4f;
-  color: #fff;
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-#chatBody {
-  padding: 10px;
-}
-
-#controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-#messageInput {
-  flex-grow: 1;
-  padding: 5px;
-  font-size: 14px;
-}
-
+/* 💬 Floating Chat Widget */
 #chatWidget {
   position: fixed;
   bottom: 100px;
@@ -68,7 +30,7 @@ body {
   background: white;
   border: 1px solid #ccc;
   border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   z-index: 1000;
@@ -78,6 +40,7 @@ body {
   display: none;
 }
 
+/* 🟦 Chat Header */
 #chatHeader {
   background-color: #007bff;
   color: white;
@@ -97,6 +60,7 @@ body {
   cursor: pointer;
 }
 
+/* 💬 Chat Messages */
 #messages {
   flex: 1;
   padding: 10px;
@@ -106,33 +70,4 @@ body {
   border-bottom: 1px solid #eee;
 }
 
-#controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 8px;
-  gap: 6px;
-}
-
-#controls input[type="text"] {
-  flex: 1;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-#controls input[type="file"] {
-  font-size: 12px;
-}
-
-#controls button {
-  padding: 6px 8px;
-  border: none;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-#controls button:hover {
-  background-color: #ddd;
-}
+/* 🧾 Input & Contr*
