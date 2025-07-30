@@ -43,10 +43,10 @@ sendBtn.addEventListener("click", () => {
   messageInput.value = "";
 });
 
-socket.on("chat_message", (msg) => {
-  const who = msg.sender === "admin" ? "Admin" : "User";
-  const text = msg.message;
-  addMessage(who, text);
+socket.on("chat_message", (data) => {
+  const loc = data.location ? `[${data.location}, ${data.country}]` : "[Unknown]";
+  const html = `<p><strong>${data.sender}</strong> ${loc} (${formatTime(data.timestamp)}): ${data.message}</p>`;
+  messagesDiv.innerHTML += html;
 });
 
 function addMessage(sender, message) {

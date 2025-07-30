@@ -1,3 +1,4 @@
+const ipinfo = require("ipinfo");
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
@@ -80,23 +81,25 @@ io.on("connection", (socket) => {
     socket.geo = geo;
   });
 
-  socket.on("user_message", async (msg) => {
-    if (!messages) return console.error("MongoDB not initialized");
+ socket.on("user_message", async (msg) => {
+  const ip = socket.handshake.address;
+
+  ipinfo(ip, async (err, cLoc) => {
+    const location = cLoc?.region || "Unknown";
+    const country = cLoc?.country || "Unknown";
 
     const fullMsg = {
       sender: "user",
       message: msg,
-      time: new Date(),
-      geo: socket.geo,
+      location: location,
+      country: country,
+      timestamp: new Date()
     };
 
     await messages.insertOne(fullMsg);
     io.emit("chat_message", fullMsg);
-
-    if (!isAdminOnline) {
-      sendEmailFallback(fullMsg);
-    }
   });
+});
 
   socket.on("admin_message", async (msg) => {
     const fullMsg = {
