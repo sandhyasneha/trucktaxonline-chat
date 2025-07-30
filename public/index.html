@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Trucktaxonline Chat</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
 </head>
 <body>
-  <div class="chat-widget">
-    <button class="chat-toggle" onclick="toggleChat()">💬</button>
-    <div class="chat-box" id="chatBox">
-      <div class="chat-header">
-        <span>Please enter your message</span>
-        <button class="close" onclick="toggleChat()">×</button>
-      </div>
-      <div class="chat-body" id="chat"></div>
-      <div class="quick-buttons">
-        <button onclick="quickSend('Hello!')">Hello!</button>
-        <button onclick="quickSend('I need help')">I need help</button>
-      </div>
-      <div class="chat-input">
-        <input id="msg" placeholder="Type here..." />
-        <button onclick="send()">↑</button>
-      </div>
+  <div id="chatContainer">
+    <h2>💬 Chat with Trucktaxonline</h2>
+    <div id="messages"></div>
+
+    <div id="controls">
+      <input type="file" id="fileInput" />
+      <input type="text" id="messageInput" placeholder="Type your message..." />
+      <emoji-picker id="emojiPicker" style="position:absolute; display:none;"></emoji-picker>
+      <button id="emojiBtn">😊</button>
+      <button id="sendBtn">Send</button>
+      <button id="downloadBtn">⬇️ Download Chat</button>
     </div>
   </div>
-  <script src="/socket.io/socket.io.js"></script>
+
   <script src="chat.js"></script>
 </body>
 </html>
