@@ -7,6 +7,12 @@ const emojiPicker = document.getElementById("emojiPicker");
 const fileInput = document.getElementById("fileInput");
 const downloadBtn = document.getElementById("downloadBtn");
 
+
+document.getElementById("chatHeader").addEventListener("click", () => {
+  const body = document.getElementById("chatBody");
+  body.style.display = body.style.display === "none" ? "block" : "none";
+});
+
 let chatHistory = [];
 
 sendBtn.addEventListener("click", () => {

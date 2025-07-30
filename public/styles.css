@@ -21,6 +21,46 @@ body {
 
 #chatWidget {
   position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  font-family: sans-serif;
+  z-index: 9999;
+}
+
+#chatHeader {
+  background-color: #0a6e4f;
+  color: #fff;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#chatBody {
+  padding: 10px;
+}
+
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+#messageInput {
+  flex-grow: 1;
+  padding: 5px;
+  font-size: 14px;
+}
+
+#chatWidget {
+  position: fixed;
   bottom: 100px;
   right: 25px;
   width: 320px;
