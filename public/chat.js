@@ -7,12 +7,6 @@ const emojiPicker = document.getElementById("emojiPicker");
 const fileInput = document.getElementById("fileInput");
 const downloadBtn = document.getElementById("downloadBtn");
 
-
-document.getElementById("chatHeader").addEventListener("click", () => {
-  const body = document.getElementById("chatBody");
-  body.style.display = body.style.display === "none" ? "block" : "none";
-});
-
 let chatHistory = [];
 
 sendBtn.addEventListener("click", () => {
@@ -59,17 +53,19 @@ function formatTime(dateStr) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Toggle floating chat widget
-const chatBubble = document.getElementById("chatBubble");
-const chatWidget = document.getElementById("chatWidget");
-const closeBtn = document.getElementById("closeBtn");
+// Floating widget toggle logic
+document.addEventListener("DOMContentLoaded", () => {
+  const chatBubble = document.getElementById("chatBubble");
+  const chatWidget = document.getElementById("chatWidget");
+  const closeBtn = document.getElementById("closeBtn");
 
-chatBubble.addEventListener("click", () => {
-  chatWidget.classList.remove("hidden");
-  chatBubble.style.display = "none";
-});
+  chatBubble.addEventListener("click", () => {
+    chatWidget.classList.remove("hidden");
+    chatBubble.style.display = "none";
+  });
 
-closeBtn.addEventListener("click", () => {
-  chatWidget.classList.add("hidden");
-  chatBubble.style.display = "block";
+  closeBtn.addEventListener("click", () => {
+    chatWidget.classList.add("hidden");
+    chatBubble.style.display = "block";
+  });
 });
