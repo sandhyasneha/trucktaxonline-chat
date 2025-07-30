@@ -1,21 +1,35 @@
-<!-- Chat bubble launcher -->
-<div id="chatBubble">💬</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trucktaxonline Chat</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+</head>
 
-<!-- Floating Chat Widget -->
-<div id="chatWidget" class="hidden">
-  <div id="chatHeader">
-    <strong>Chat with Trucktaxonline</strong>
-    <button id="closeBtn">×</button>
+<body>
+  <!-- 💬 Chat Bubble Launcher -->
+  <div id="chatBubble">💬</div>
+
+  <!-- 💬 Floating Chat Widget -->
+  <div id="chatWidget" class="hidden">
+    <div id="chatHeader">
+      <strong>Chat with Trucktaxonline</strong>
+      <button id="closeBtn">×</button>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="controls">
+      <input type="file" id="fileInput" />
+      <input type="text" id="messageInput" placeholder="Type your message..." />
+      <emoji-picker id="emojiPicker" style="position:absolute; display:none;"></emoji-picker>
+      <button id="emojiBtn">😊</button>
+      <button id="sendBtn">Send</button>
+      <button id="downloadBtn">⬇️ Download Chat</button>
+    </div>
   </div>
 
-  <div id="messages"></div>
-
-  <div id="controls">
-    <input type="file" id="fileInput" />
-    <input type="text" id="messageInput" placeholder="Type your message..." />
-    <emoji-picker id="emojiPicker" style="position:absolute; display:none;"></emoji-picker>
-    <button id="emojiBtn">😊</button>
-    <button id="sendBtn">Send</button>
-    <button id="downloadBtn">⬇️ Download Chat</button>
-  </div>
-</div>
+  <script src="chat.js"></script>
+</body>
+</html>
