@@ -53,7 +53,7 @@ function formatTime(dateStr) {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-// Floating Widget Toggle
+// Widget Toggle Logic
 document.addEventListener("DOMContentLoaded", () => {
   const chatBubble = document.getElementById("chatBubble");
   const chatWidget = document.getElementById("chatWidget");
