@@ -57,4 +57,95 @@ async function getGeoInfo(ip) {
 let isAdminOnline = false;
 
 app.post("/login", (req, res) => {
-  const { usern
+  const { username, password } = req.body;
+  if (username === "admin" && password === "admin123") {
+    req.session.authenticated = true;
+    isAdminOnline = true;
+    return res.redirect("/admin/admin.html");
+  }
+  res.send("Invalid credentials. <a href='/admin/login.html'>Try again</a>");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  isAdminOnline = false;
+  res.redirect("/admin/login.html");
+});
+
+io.on("connection", (socket) => {
+  let rawIP = socket.handshake.headers["x-forwarded-for"] || socket.conn.remoteAddress;
+  const ip = rawIP?.split(",")[0]?.replace("::ffff:", "") || "0.0.0.0";
+
+  getGeoInfo(ip).then((geo) => {
+    socket.geo = geo;
+  });
+
+  socket.on("user_message", async (msg) => {
+    if (!messages) return console.error("MongoDB not initialized");
+
+    const fullMsg = {
+      sender: "user",
+      message: msg,
+      time: new Date(),
+      geo: socket.geo,
+    };
+
+    await messages.insertOne(fullMsg);
+    io.emit("chat_message", fullMsg);
+
+    if (!isAdminOnline) {
+      sendEmailFallback(fullMsg);
+    }
+  });
+
+  socket.on("admin_message", async (msg) => {
+    const fullMsg = {
+      sender: "admin",
+      message: msg,
+      time: new Date(),
+      geo: null,
+    };
+
+    await messages.insertOne(fullMsg);
+    io.emit("chat_message", fullMsg);
+  });
+
+  socket.on("disconnect", () => {
+    isAdminOnline = false;
+  });
+});
+
+async function sendEmailFallback(msg) {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_FROM,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const body = `
+    <h3>New Chat Message (Admin Offline)</h3>
+    <p><strong>Message:</strong> ${msg.message}</p>
+    <p><strong>Location:</strong> ${msg.geo?.city}, ${msg.geo?.country}</p>
+    <p><strong>IP:</strong> ${msg.geo?.ip}</p>
+    <p><strong>Time:</strong> ${msg.time}</p>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: process.env.EMAIL_TO || "support@trucktaxonline.com",
+    subject: "Trucktaxonline - New Chat Message",
+    html: body
+  });
+}
+
+app.get("/history", async (req, res) => {
+  if (!messages) return res.status(500).json({ error: "DB not ready" });
+  const chat = await messages.find().sort({ time: 1 }).toArray();
+  res.json(chat);
+});
+
+server.listen(PORT, () => {
+  console.log(`🚀 Trucktaxonline Chat running on ${PORT}`);
+});
