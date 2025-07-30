@@ -1,1 +1,3 @@
 mongodb+srv://truckadmin:<db_password>@cluster0.c6shpkq.mongodb.net/
+
+mongodb+srv://truckadmin:Truck@1234@cluster0.c6shpkq.mongodb.net/trucktax_chat?retryWrites=true&w=majority

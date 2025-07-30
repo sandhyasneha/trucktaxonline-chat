@@ -2,8 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const axios = require("axios");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+const axios = require("axios");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 const { MongoClient } = require("mongodb");
 
 const app = express();
@@ -13,12 +16,17 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+  secret: "trucktaxonline-secret",
+  resave: false,
+  saveUninitialized: true
+}));
 
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 const client = new MongoClient(mongoUri);
 let messages;
 
-// Connect MongoDB
 (async () => {
   try {
     await client.connect();
@@ -30,7 +38,6 @@ let messages;
   }
 })();
 
-// Get IP geo info
 async function getGeoInfo(ip) {
   try {
     const { data } = await axios.get(`https://ipapi.co/${ip}/json/`);
@@ -45,8 +52,25 @@ async function getGeoInfo(ip) {
   }
 }
 
+let isAdminOnline = false;
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "admin123") {
+    req.session.authenticated = true;
+    isAdminOnline = true;
+    return res.redirect("/admin/admin.html");
+  }
+  res.send("Invalid credentials. <a href='/admin/login.html'>Try again</a>");
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  isAdminOnline = false;
+  res.redirect("/admin/login.html");
+});
+
 io.on("connection", (socket) => {
-  // Improved IP parsing
   let rawIP = socket.handshake.headers["x-forwarded-for"] || socket.conn.remoteAddress;
   const ip = rawIP?.split(",")[0]?.replace("::ffff:", "") || "0.0.0.0";
 
@@ -66,11 +90,13 @@ io.on("connection", (socket) => {
 
     await messages.insertOne(fullMsg);
     io.emit("chat_message", fullMsg);
+
+    if (!isAdminOnline) {
+      sendEmailFallback(fullMsg);
+    }
   });
 
   socket.on("admin_message", async (msg) => {
-    if (!messages) return console.error("MongoDB not initialized");
-
     const fullMsg = {
       sender: "admin",
       message: msg,
@@ -81,9 +107,37 @@ io.on("connection", (socket) => {
     await messages.insertOne(fullMsg);
     io.emit("chat_message", fullMsg);
   });
+
+  socket.on("disconnect", () => {
+    isAdminOnline = false;
+  });
 });
 
-// View chat history (for admin)
+async function sendEmailFallback(msg) {
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_FROM,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+
+  const body = `
+    <h3>New Chat Message (Admin Offline)</h3>
+    <p><strong>Message:</strong> ${msg.message}</p>
+    <p><strong>Location:</strong> ${msg.geo?.city}, ${msg.geo?.country}</p>
+    <p><strong>IP:</strong> ${msg.geo?.ip}</p>
+    <p><strong>Time:</strong> ${msg.time}</p>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: process.env.EMAIL_TO || "support@trucktaxonline.com",
+    subject: "Trucktaxonline - New Chat Message",
+    html: body
+  });
+}
+
 app.get("/history", async (req, res) => {
   if (!messages) return res.status(500).json({ error: "DB not ready" });
   const chat = await messages.find().sort({ time: 1 }).toArray();
