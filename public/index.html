@@ -20,7 +20,7 @@
     <div id="messages"></div>
     <div id="controls">
       <input type="file" id="fileInput" />
-      <input type="text" id="messageInput" placeholder="Type your message..." />
+      <textarea id="messageInput" rows="2" placeholder="Type your message..."></textarea>
       <emoji-picker id="emojiPicker" style="position:absolute; display:none;"></emoji-picker>
       <button id="emojiBtn">😊</button>
       <button id="sendBtn">Send</button>
@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <!-- ✅ First load socket.io, then your script -->
+  <!-- Load Socket.IO first -->
   <script src="/socket.io/socket.io.js"></script>
   <script src="chat.js"></script>
 </body>
